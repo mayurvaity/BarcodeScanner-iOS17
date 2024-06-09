@@ -11,6 +11,7 @@ struct BarcodeScannerView: View {
     
     //creating a var to store barcode
     @State private var scannedCode = ""
+    @State private var isShowingAlert = false
     
     var body: some View {
         NavigationView {
@@ -32,8 +33,19 @@ struct BarcodeScannerView: View {
                     .font(.largeTitle)
                     .foregroundStyle(Color(scannedCode.isEmpty ? .red : .green))
                     .padding()
+                
+                Button {
+                    isShowingAlert = true
+                } label: {
+                    Text("Tap Me")
+                }
             }
             .navigationTitle("Barcode Scanner")
+            .alert(isPresented: $isShowingAlert) {
+                Alert(title: Text("Test"),
+                      message: Text("This is a test."),
+                      dismissButton: .default(Text("Ok")))
+            }
         }
     }
 }
