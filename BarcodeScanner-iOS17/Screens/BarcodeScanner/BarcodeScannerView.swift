@@ -9,16 +9,17 @@ import SwiftUI
 
 struct BarcodeScannerView: View {
     
-    //creating a var to store barcode
-    @State private var scannedCode = ""
-    @State private var isShowingAlert = false
+    //creating an obj of viewmodel
+    //variables are stored on viewmodel
+    @StateObject var viewModel = BarcodeScannerViewModel()
     
     var body: some View {
         NavigationView {
             VStack {
                 //.infinity in .frame maxwidth to fill the screen
                 //maxHeight - will limit height for different devices
-                ScannerView(scannedCode: $scannedCode)
+                ScannerView(scannedCode: $viewModel.scannedCode, 
+                            alertItem: $viewModel.alertItem)
                     .frame(maxWidth: .infinity, maxHeight: 300)
                 
                 //to add space between below stuff and rectangle of height 60
@@ -28,23 +29,17 @@ struct BarcodeScannerView: View {
                     .font(.title)
                 
                 //if scannedcode is blank "" then to display not yet scanned else displaying barcode that we got
-                Text(scannedCode.isEmpty ? "Not Yet Scanned" : scannedCode)
+                Text(viewModel.statusText)
                     .bold()
                     .font(.largeTitle)
-                    .foregroundStyle(Color(scannedCode.isEmpty ? .red : .green))
+                    .foregroundStyle(Color(viewModel.statusTextColor))
                     .padding()
-                
-                Button {
-                    isShowingAlert = true
-                } label: {
-                    Text("Tap Me")
-                }
             }
             .navigationTitle("Barcode Scanner")
-            .alert(isPresented: $isShowingAlert) {
-                Alert(title: Text("Test"),
-                      message: Text("This is a test."),
-                      dismissButton: .default(Text("Ok")))
+            .alert(item: $viewModel.alertItem) { alertItem in
+                Alert(title: Text(alertItem.title),
+                      message: Text(alertItem.message),
+                      dismissButton: alertItem.dismissButton)
             }
         }
     }

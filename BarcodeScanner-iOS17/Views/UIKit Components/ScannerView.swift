@@ -11,6 +11,7 @@ struct ScannerView: UIViewControllerRepresentable {
     
     //to communicate value of scanned code from here to main view
     @Binding var scannedCode: String
+    @Binding var alertItem: AlertItem? 
     
     //a swiftuI view conforming to UIViewControllerRepresentable can return a VC instead of standard swiftui view (using body),
     //for this we need to specify type of VC it is going to return, below typealias is for that,
@@ -48,14 +49,19 @@ struct ScannerView: UIViewControllerRepresentable {
         
         func didSurface(error: CameraError) {
             //getting string value from enum, if any error surfaces
-            print(error.rawValue)
+            switch error {
+            case .invalidDeviceInput:
+                scannerView.alertItem = AlertContext.invalidDeviceInput
+            case .invalidScannedValue:
+                scannerView.alertItem = AlertContext.invalidScannedType
+            }
         }
         
         
     }
     
 }
-
-#Preview {
-    ScannerView(scannedCode: .constant("1234567890123"))
-}
+//
+//#Preview {
+//    ScannerView(scannedCode: .constant("1234567890123"), alertItem: <#Binding<AlertItem?>#>)
+//}
