@@ -20,7 +20,7 @@ struct BarcodeScannerView: View {
                 //maxHeight - will limit height for different devices
                 ScannerView(scannedCode: $viewModel.scannedCode, 
                             alertItem: $viewModel.alertItem)
-                    .frame(maxWidth: .infinity, maxHeight: 300)
+                    .frame(maxHeight: 300)
                 
                 //to add space between below stuff and rectangle of height 60
                 Spacer().frame(height: 60)
@@ -37,8 +37,8 @@ struct BarcodeScannerView: View {
             }
             .navigationTitle("Barcode Scanner")
             .alert(item: $viewModel.alertItem) { alertItem in
-                Alert(title: Text(alertItem.title),
-                      message: Text(alertItem.message),
+                Alert(title: alertItem.title,
+                      message: alertItem.message,
                       dismissButton: alertItem.dismissButton)
             }
         }
